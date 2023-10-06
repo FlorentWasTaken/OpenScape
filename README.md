@@ -18,11 +18,12 @@
 
 This project is a small game engine which includes a block-like game (Inspired by Minecraft).
 It features a procedural terrain generation system. The terrain is editable by the player.
+For this project the game is in 2D to learn basics of rendering.
 
 ### Built with
 
 - ![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)
-- ![OpenGL](https://img.shields.io/badge/OpenGL-%23FFFFFF.svg?style=for-the-badge&logo=opengl)
+- ![OpenGL](https://img.shields.io/badge/OpenGL-%23FFFFFF.svg?style=for-the-badge&logo=opengl) (SDL2)
 
 ## License
 
