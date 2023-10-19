@@ -14,12 +14,14 @@ use sdl2::keyboard::Keycode;
 use sdl2::video::Window;
 use sdl2::render::Canvas;
 use sdl2::pixels::Color;
+use square::create_squares;
 
 fn main() {
     let game: (Canvas<Window>, sdl2::EventPump) = window::init_game(800, 600);
     let mut canvas: Canvas<Window> = game.0;
     let mut event_pump: sdl2::EventPump = game.1;
     let square = square::Square::new(0, 0, Color::RGB(255, 0, 0));
+    let vect: Vec<Vec<square::Square>> = create_squares(0, 0, Color::RGB(255, 0, 0), 5, 7);
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -36,7 +38,11 @@ fn main() {
         canvas.clear();
 
         // logic here
-        square.draw(&mut canvas);
+        for row in &vect {
+            for block in row {
+                block.draw(&mut canvas);
+            }
+        }
 
         canvas.present();
     }

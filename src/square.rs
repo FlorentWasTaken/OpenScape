@@ -32,3 +32,20 @@ impl Square {
         canvas.fill_rect(self.rect);
     }
 }
+
+pub fn create_squares(x: i32, y: i32, rectangle_color: Color, nb_x: i32, nb_y: i32) -> Vec<Vec<Square>> {
+    let size: i32 = SQUARE_SIZE as i32;
+    let mut vec: Vec<Vec<Square>> = Vec::new();
+
+    for j in 1..nb_y {
+        let mut row: Vec<Square> = Vec::new();
+
+        for i in 1..nb_x {
+            let square = Square::new(x + size * (i - 1), y + size * (j - 1), rectangle_color);
+
+            row.push(square);
+        }
+        vec.push(row);
+    }
+    vec
+}
