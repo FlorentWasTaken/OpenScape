@@ -6,5 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-sdl2 = "0.34"
 gl = "*"
+
+[dependencies.sdl2]
+version = "0.34"
+default-features = false
+features = ["image"]
