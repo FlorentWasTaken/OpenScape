@@ -33,17 +33,17 @@ impl Square {
     }
 }
 
-pub fn create_squares(x: i32, y: i32, rectangle_color: Color, nb_x: i32, nb_y: i32) -> Vec<Vec<Square>> {
+pub fn create_squares(x: i32, y: i32, rectangle_color: Color, nb_x: i32, nb_y: i32) -> Vec<Vec<Option<Square>>> {
     let size: i32 = SQUARE_SIZE as i32;
-    let mut vec: Vec<Vec<Square>> = Vec::new();
+    let mut vec: Vec<Vec<Option<Square>>> = Vec::new();
 
     for j in 1..nb_y {
-        let mut row: Vec<Square> = Vec::new();
+        let mut row: Vec<Option<Square>> = Vec::new();
 
         for i in 1..nb_x {
             let square = Square::new(x + size * (i - 1), y + size * (j - 1), rectangle_color);
 
-            row.push(square);
+            row.push(Some(square));
         }
         vec.push(row);
     }
