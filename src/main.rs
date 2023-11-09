@@ -33,7 +33,7 @@ fn main() {
     let game: (Canvas<Window>, sdl2::EventPump) = window::init_game(800, 600);
     let mut canvas: Canvas<Window> = game.0;
     let mut event_pump: sdl2::EventPump = game.1;
-    let mut vect: Vec<Vec<Option<square::Square>>> = create_squares(0, 0, Color::RGB(255, 0, 0), 5, 7);
+    let mut vect: Vec<Vec<Option<square::Square>>> = create_squares(0, 0, 5, 7);
     let _image_context = sdl2::image::init(sdl2::image::InitFlag::JPG).unwrap();
     let texture_creator: TextureCreator<_> = canvas.texture_creator();
     let mut camera = Camera::new(0, 0);
@@ -81,6 +81,11 @@ fn main() {
                             }
                         }
                         MouseButton::Right => {
+                            if let Some(val) = vect.get_mut((y / CUBE_SIZE) as usize) {
+                                if let Some(bloc) = val.get_mut((x / CUBE_SIZE) as usize) {
+                                    *bloc = Some(square::Square::new((x / CUBE_SIZE) * CUBE_SIZE, (y / CUBE_SIZE) * CUBE_SIZE));
+                                }
+                            }
                         }
                         _ => {}
                     }
