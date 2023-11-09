@@ -8,8 +8,8 @@
 extern crate sdl2;
 extern crate noise;
 mod window;
-mod square;
 mod camera;
+mod world;
 
 use sdl2::mouse::{MouseState, self};
 use sdl2::mouse::MouseButton;
@@ -22,8 +22,8 @@ use sdl2::render::Canvas;
 use sdl2::pixels::Color;
 use sdl2::render::TextureCreator;
 use sdl2::image::LoadTexture;
-use square::create_squares;
 use camera::Camera;
+use world::init_world;
 
 const WIDTH:i32 = 800;
 const HEIGHT: i32 = 600;
@@ -33,7 +33,7 @@ fn main() {
     let game: (Canvas<Window>, sdl2::EventPump) = window::init_game(800, 600);
     let mut canvas: Canvas<Window> = game.0;
     let mut event_pump: sdl2::EventPump = game.1;
-    let mut vect: Vec<Vec<Option<square::Square>>> = create_squares(0, 0, 5, 7);
+    let mut vect: Vec<Vec<Option<world::square::Square>>> = init_world();
     let _image_context = sdl2::image::init(sdl2::image::InitFlag::JPG).unwrap();
     let texture_creator: TextureCreator<_> = canvas.texture_creator();
     let mut camera = Camera::new(0, 0);
@@ -83,7 +83,7 @@ fn main() {
                         MouseButton::Right => {
                             if let Some(val) = vect.get_mut((y / CUBE_SIZE) as usize) {
                                 if let Some(bloc) = val.get_mut((x / CUBE_SIZE) as usize) {
-                                    *bloc = Some(square::Square::new((x / CUBE_SIZE) * CUBE_SIZE, (y / CUBE_SIZE) * CUBE_SIZE));
+                                    *bloc = Some(world::square::Square::new((x / CUBE_SIZE) * CUBE_SIZE, (y / CUBE_SIZE) * CUBE_SIZE));
                                 }
                             }
                         }
