@@ -10,6 +10,7 @@ extern crate noise;
 mod window;
 mod camera;
 mod world;
+mod sky;
 
 use sdl2::mouse::{MouseState, self};
 use sdl2::mouse::MouseButton;
@@ -19,11 +20,12 @@ use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::video::Window;
 use sdl2::render::Canvas;
-use sdl2::pixels::Color;
 use sdl2::render::TextureCreator;
 use sdl2::image::LoadTexture;
 use camera::Camera;
 use world::init_world;
+use sky::manage_day_time;
+use std::time::Instant;
 
 const WIDTH:i32 = 800;
 const HEIGHT: i32 = 600;
@@ -42,7 +44,7 @@ fn main() {
         .load_texture("./assets/grass.jpg")
         .expect("Failed to load texture");
 
-
+    let start_time = Instant::now();
     let perlin = Perlin::new(42);
     let scale = 0.1;
 
@@ -93,12 +95,8 @@ fn main() {
                 _ => {}
             }
         }
-        let mouse_state: MouseState = sdl2::mouse::MouseState::new(&event_pump);
-        let mouse_x = mouse_state.x() / CUBE_SIZE;
-        let mouse_y = mouse_state.y() / CUBE_SIZE;
 
-        canvas.set_draw_color(Color::RGB(0, 255, 255));
-        canvas.clear();
+        manage_day_time(start_time, &mut canvas);
 
         // logic here
         for row in &vect {
