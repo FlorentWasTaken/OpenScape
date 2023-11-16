@@ -6,7 +6,6 @@
 */
 
 extern crate sdl2;
-extern crate noise;
 mod window;
 mod camera;
 mod world;
@@ -16,7 +15,6 @@ mod info;
 use sdl2::pixels::Color;
 use sdl2::ttf;
 use sdl2::mouse::MouseButton;
-use noise::{Perlin};
 use sdl2::rect::Rect;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
@@ -30,8 +28,6 @@ use sky::manage_day_time;
 use std::time::Instant;
 use info::draw_info;
 
-const WIDTH:i32 = 800;
-const HEIGHT: i32 = 600;
 const CUBE_SIZE: i32 = 50;
 
 fn main() {
@@ -48,8 +44,6 @@ fn main() {
         .expect("Failed to load texture");
 
     let start_time = Instant::now();
-    let perlin = Perlin::new(42);
-    let scale = 0.1;
     let mut frames: f32 = 0.0;
     let mut prev_frame_time = Instant::now();
     let ttf_context = ttf::init().unwrap();
