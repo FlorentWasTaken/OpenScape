@@ -6,36 +6,30 @@
 */
 
 use sdl2::rect::Rect;
+use sdl2::render::Texture;
+use sdl2::video::Window;
+use sdl2::render::Canvas;
 
 const SQUARE_SIZE: u32 = 50;
 
-pub struct Square {
-    pub rect: Rect
+pub struct Square<'a> {
+    pub rect: Rect,
+    pub texture: &'a Texture<'a>
 }
 
-impl Square {
-    pub fn new(x: i32, y: i32) -> Square {
+impl<'a> Square<'a> {
+    pub fn new(x: i32, y: i32, texture: &'a Texture<'a>) -> Square<'a> {
         let rectangle = Rect::new(x, y, SQUARE_SIZE, SQUARE_SIZE);
 
         Square {
-            rect: rectangle
+            rect: rectangle,
+            texture: texture
         }
     }
-}
 
-pub fn create_squares(x: i32, y: i32, nb_x: i32, nb_y: i32) -> Vec<Vec<Option<Square>>> {
-    let size: i32 = SQUARE_SIZE as i32;
-    let mut vec: Vec<Vec<Option<Square>>> = Vec::new();
+    pub fn display(&mut self, x: i32, y: i32, canvas: &mut Canvas<Window>) {
+        let dest_rect = Rect::new(self.rect.x + x, self.rect.y + y, self.rect.width(), self.rect.height());
 
-    for j in 1..nb_y {
-        let mut row: Vec<Option<Square>> = Vec::new();
-
-        for i in 1..nb_x {
-            let square = Square::new(x + size * (i - 1), y + size * (j - 1));
-
-            row.push(Some(square));
-        }
-        vec.push(row);
+        canvas.copy(&self.texture, None, dest_rect).expect("Failed to apply texture");
     }
-    vec
 }

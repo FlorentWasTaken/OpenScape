@@ -15,7 +15,6 @@ mod info;
 use sdl2::pixels::Color;
 use sdl2::ttf;
 use sdl2::mouse::MouseButton;
-use sdl2::rect::Rect;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::video::Window;
@@ -23,6 +22,7 @@ use sdl2::render::Canvas;
 use sdl2::render::TextureCreator;
 use sdl2::image::LoadTexture;
 use camera::Camera;
+use sdl2::video::WindowContext;
 use world::init_world;
 use sky::manage_day_time;
 use std::time::Instant;
@@ -34,12 +34,12 @@ fn main() {
     let game: (Canvas<Window>, sdl2::EventPump) = window::init_game(800, 600);
     let mut canvas: Canvas<Window> = game.0;
     let mut event_pump: sdl2::EventPump = game.1;
-    let mut vect: Vec<Vec<Option<world::square::Square>>> = init_world();
+    let mut vect: Vec<Vec<Option<world::square::Square<'_>>>> = init_world();
     let _image_context = sdl2::image::init(sdl2::image::InitFlag::JPG).unwrap();
-    let texture_creator: TextureCreator<_> = canvas.texture_creator();
+    let texture_creator: TextureCreator<WindowContext> = canvas.texture_creator();
     let mut camera = Camera::new(0, 0);
 
-    let texture = texture_creator
+    let texture = &texture_creator
         .load_texture("./assets/grass.jpg")
         .expect("Failed to load texture");
 
@@ -90,7 +90,7 @@ fn main() {
                         MouseButton::Right => {
                             if let Some(val) = vect.get_mut((y / CUBE_SIZE) as usize) {
                                 if let Some(bloc) = val.get_mut((x / CUBE_SIZE) as usize) {
-                                    *bloc = Some(world::square::Square::new((x / CUBE_SIZE) * CUBE_SIZE, (y / CUBE_SIZE) * CUBE_SIZE));
+                                    *bloc = Some(world::square::Square::new((x / CUBE_SIZE) * CUBE_SIZE, (y / CUBE_SIZE) * CUBE_SIZE, &texture));
                                 }
                             }
                         }
@@ -105,11 +105,10 @@ fn main() {
         draw_info(&mut frames, &mut prev_frame_time, &texture_creator, &mut fps_text, &font, &mut canvas);
 
         // logic here
-        for row in &vect {
+        for row in &mut vect {
             for block in row {
-                if let Some(inner_square) = block.as_ref() {
-                    let dest_rect = Rect::new(inner_square.rect.x + camera.x, inner_square.rect.y + camera.y, inner_square.rect.width(), inner_square.rect.height());
-                    canvas.copy(&texture, None, dest_rect).expect("Failed to apply texture");
+                if let Some(inner_square) = block.as_mut() {
+                    inner_square.display(camera.x, camera.y, &mut canvas);
                 }
             }
         }
