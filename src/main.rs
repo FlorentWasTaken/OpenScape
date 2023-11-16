@@ -11,10 +11,12 @@ mod window;
 mod camera;
 mod world;
 mod sky;
+mod info;
 
-use sdl2::mouse::{MouseState, self};
+use sdl2::pixels::Color;
+use sdl2::ttf;
 use sdl2::mouse::MouseButton;
-use noise::{Perlin, NoiseFn};
+use noise::{Perlin};
 use sdl2::rect::Rect;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
@@ -26,6 +28,7 @@ use camera::Camera;
 use world::init_world;
 use sky::manage_day_time;
 use std::time::Instant;
+use info::draw_info;
 
 const WIDTH:i32 = 800;
 const HEIGHT: i32 = 600;
@@ -47,6 +50,14 @@ fn main() {
     let start_time = Instant::now();
     let perlin = Perlin::new(42);
     let scale = 0.1;
+    let mut frames: f32 = 0.0;
+    let mut prev_frame_time = Instant::now();
+    let ttf_context = ttf::init().unwrap();
+    let font = ttf_context.load_font("assets/Basic-Regular.ttf", 36).unwrap();
+    let mut fps_text = texture_creator.create_texture_from_surface(
+        font.render("FPS: 0").blended(Color::WHITE).unwrap(),
+    ).unwrap();
+
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -97,6 +108,7 @@ fn main() {
         }
 
         manage_day_time(start_time, &mut canvas);
+        draw_info(&mut frames, &mut prev_frame_time, &texture_creator, &mut fps_text, &font, &mut canvas);
 
         // logic here
         for row in &vect {
@@ -109,5 +121,6 @@ fn main() {
         }
 
         canvas.present();
+        std::thread::sleep(std::time::Duration::from_millis(16));
     }
 }
