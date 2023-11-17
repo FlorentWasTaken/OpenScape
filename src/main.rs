@@ -11,6 +11,7 @@ mod camera;
 mod world;
 mod sky;
 mod info;
+mod script;
 
 use sdl2::pixels::Color;
 use sdl2::ttf;
@@ -27,6 +28,7 @@ use world::init_world;
 use sky::manage_day_time;
 use std::time::Instant;
 use info::draw_info;
+use script::run_script;
 
 const CUBE_SIZE: i32 = 50;
 
@@ -52,7 +54,7 @@ fn main() {
         font.render("FPS: 0").blended(Color::WHITE).unwrap(),
     ).unwrap();
 
-
+    run_script().unwrap();
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {

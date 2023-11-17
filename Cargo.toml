@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 gl = "*"
+rlua = "0.19.7"
 
 [dependencies.sdl2]
 version = "0.34"
