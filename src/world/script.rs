@@ -7,17 +7,22 @@
 
 use rlua::{Lua, Result};
 use std::fs;
+use crate::world::create_block;
 
-fn test_func(_ctx: rlua::Context, (arg1, arg2): (i32, f64)) -> Result<i32> {
-    Ok(arg1 + (arg2 as i32))
-}
+const SQUARE_SIZE: i32 = 50;
 
 pub fn run_script() -> Result<()> {
     let script = fs::read_to_string("./src/script/main.lua").expect("Failed to load lua");
     let lua = Lua::new();
 
     lua.context(|lua_ctx| {
-        lua_ctx.globals().set("test_func", lua_ctx.create_function(test_func)?)?;
+        lua_ctx.globals().set(
+            "create_block",
+            lua_ctx.create_function_mut(|_, (x, y): (i32, i32)| {
+                create_block(x * SQUARE_SIZE, y * SQUARE_SIZE);
+                Ok(())
+            })?,
+        )?;
         lua_ctx.load(&script).exec()?;
 
         Ok(())

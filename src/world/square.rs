@@ -13,32 +13,30 @@ use sdl2::render::Canvas;
 const SQUARE_SIZE: u32 = 50;
 
 #[derive(Clone)]
-pub struct Square<'a> {
-    pub rect: Rect,
-    pub texture: &'a Texture<'a>
+pub struct Square {
+    pub rect: Rect
 }
 
-pub struct ClonableOptionSquare<'a>(Option<Square<'a>>);
+pub struct ClonableOptionSquare(Option<Square>);
 
-impl<'a> Clone for ClonableOptionSquare<'a> {
+impl Clone for ClonableOptionSquare{
     fn clone(&self) -> Self {
         ClonableOptionSquare(self.0.clone())
     }
 }
 
-impl<'a> Square<'a> {
-    pub fn new(x: i32, y: i32, texture: &'a Texture<'a>) -> Square<'a> {
+impl Square {
+    pub fn new(x: i32, y: i32) -> Square {
         let rectangle = Rect::new(x, y, SQUARE_SIZE, SQUARE_SIZE);
 
         Square {
-            rect: rectangle,
-            texture: texture
+            rect: rectangle
         }
     }
 
-    pub fn display(&mut self, x: i32, y: i32, canvas: &mut Canvas<Window>) {
+    pub fn display(&mut self, x: i32, y: i32, canvas: &mut Canvas<Window>, texture: &Texture<'_>) {
         let dest_rect = Rect::new(self.rect.x + x, self.rect.y + y, self.rect.width(), self.rect.height());
 
-        canvas.copy(&self.texture, None, dest_rect).expect("Failed to apply texture");
+        canvas.copy(&texture, None, dest_rect).expect("Failed to apply texture");
     }
 }

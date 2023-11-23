@@ -11,9 +11,7 @@ mod camera;
 mod world;
 mod sky;
 mod info;
-mod script;
 
-use std::sync::{Arc, Mutex};
 use sdl2::pixels::Color;
 use sdl2::ttf;
 use sdl2::mouse::MouseButton;
@@ -25,13 +23,20 @@ use sdl2::render::TextureCreator;
 use sdl2::image::LoadTexture;
 use camera::Camera;
 use sdl2::video::WindowContext;
+use world::create_block;
 use world::init_world;
 use sky::manage_day_time;
 use std::time::Instant;
 use info::draw_info;
-use script::run_script;
+use lazy_static::lazy_static;
+use std::sync::{Mutex, Arc};
+use world::square::Square;
 
 const CUBE_SIZE: i32 = 50;
+
+lazy_static! {
+    pub static ref GLOBAL_VECT: Arc<Mutex<Vec<Vec<Option<Square>>>>> = Arc::new(Mutex::new(init_world()));
+}
 
 fn main() {
     let game: (Canvas<Window>, sdl2::EventPump) = window::init_game(800, 600);
@@ -39,7 +44,6 @@ fn main() {
     let mut event_pump: sdl2::EventPump = game.1;
     let _image_context = sdl2::image::init(sdl2::image::InitFlag::JPG).unwrap();
     let texture_creator: TextureCreator<WindowContext> = canvas.texture_creator();
-    let mut vect: Vec<Vec<Option<world::square::Square<'_>>>> = init_world();
     let mut camera = Camera::new(0, 0);
 
     let texture = texture_creator
@@ -56,7 +60,7 @@ fn main() {
         font.render("FPS: 0").blended(Color::WHITE).unwrap(),
     ).unwrap();
 
-    run_script().unwrap();
+    world::script::run_script().unwrap();
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
@@ -85,6 +89,8 @@ fn main() {
                 Event::MouseButtonDown { mouse_btn, x, y, .. } => {
                     match mouse_btn {
                         MouseButton::Left => {
+                            let mut vect = GLOBAL_VECT.lock().unwrap();
+
                             if let Some(val) = vect.get_mut((y / CUBE_SIZE) as usize) {
                                 if let Some(bloc) = val.get_mut((x / CUBE_SIZE) as usize) {
                                     *bloc = None;
@@ -92,11 +98,7 @@ fn main() {
                             }
                         }
                         MouseButton::Right => {
-                            if let Some(val) = vect.get_mut((y / CUBE_SIZE) as usize) {
-                                if let Some(bloc) = val.get_mut((x / CUBE_SIZE) as usize) {
-                                    *bloc = Some(world::square::Square::new((x / CUBE_SIZE) * CUBE_SIZE, (y / CUBE_SIZE) * CUBE_SIZE, &texture));
-                                }
-                            }
+                            create_block((x / CUBE_SIZE) * CUBE_SIZE, (y / CUBE_SIZE) * CUBE_SIZE);
                         }
                         _ => {}
                     }
@@ -106,16 +108,17 @@ fn main() {
         }
 
         manage_day_time(start_time, &mut canvas);
-        draw_info(&mut frames, &mut prev_frame_time, &texture_creator, &mut fps_text, &font, &mut canvas);
+        let mut vect = GLOBAL_VECT.lock().unwrap();
 
         // logic here
-        for row in &mut vect {
-            for block in row {
+        for row in vect.iter_mut() {
+            for block in row.iter_mut() {
                 if let Some(inner_square) = block.as_mut() {
-                    inner_square.display(camera.x, camera.y, &mut canvas);
+                    inner_square.display(camera.x, camera.y, &mut canvas, &texture);
                 }
             }
         }
+        draw_info(&mut frames, &mut prev_frame_time, &texture_creator, &mut fps_text, &font, &mut canvas);
 
         canvas.present();
         std::thread::sleep(std::time::Duration::from_millis(16));
