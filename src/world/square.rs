@@ -12,9 +12,18 @@ use sdl2::render::Canvas;
 
 const SQUARE_SIZE: u32 = 50;
 
+#[derive(Clone)]
 pub struct Square<'a> {
     pub rect: Rect,
     pub texture: &'a Texture<'a>
+}
+
+pub struct ClonableOptionSquare<'a>(Option<Square<'a>>);
+
+impl<'a> Clone for ClonableOptionSquare<'a> {
+    fn clone(&self) -> Self {
+        ClonableOptionSquare(self.0.clone())
+    }
 }
 
 impl<'a> Square<'a> {

@@ -17,8 +17,8 @@ pub fn run_script() -> Result<()> {
     let lua = Lua::new();
 
     lua.context(|lua_ctx| {
-        lua_ctx.load(&script).exec()?;
         lua_ctx.globals().set("test_func", lua_ctx.create_function(test_func)?)?;
+        lua_ctx.load(&script).exec()?;
 
         Ok(())
     })

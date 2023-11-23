@@ -13,6 +13,7 @@ mod sky;
 mod info;
 mod script;
 
+use std::sync::{Arc, Mutex};
 use sdl2::pixels::Color;
 use sdl2::ttf;
 use sdl2::mouse::MouseButton;
@@ -36,14 +37,15 @@ fn main() {
     let game: (Canvas<Window>, sdl2::EventPump) = window::init_game(800, 600);
     let mut canvas: Canvas<Window> = game.0;
     let mut event_pump: sdl2::EventPump = game.1;
-    let mut vect: Vec<Vec<Option<world::square::Square<'_>>>> = init_world();
     let _image_context = sdl2::image::init(sdl2::image::InitFlag::JPG).unwrap();
     let texture_creator: TextureCreator<WindowContext> = canvas.texture_creator();
+    let mut vect: Vec<Vec<Option<world::square::Square<'_>>>> = init_world();
     let mut camera = Camera::new(0, 0);
 
-    let texture = &texture_creator
-        .load_texture("./assets/grass.jpg")
+    let texture = texture_creator
+        .load_texture("./assets/grass.jpg".to_string())
         .expect("Failed to load texture");
+
 
     let start_time = Instant::now();
     let mut frames: f32 = 0.0;
