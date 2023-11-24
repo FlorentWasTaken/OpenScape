@@ -10,9 +10,8 @@ end
 include("./src/script/include.lua")
 
 function main()
-    local success, result = pcall(function()
-        return place_block(10, 10)
-    end)
+    place_block(10, 10)
+    destroy_block(10, 10)
 end
 
 main()

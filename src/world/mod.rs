@@ -32,7 +32,16 @@ pub fn create_block<'a>(x: i32, y: i32) {
     if let Some(val) = vect.get_mut((y / CUBE_SIZE) as usize) {
         if let Some(bloc) = val.get_mut((x / CUBE_SIZE) as usize) {
             *bloc = Some(Square::new(x, y));
-            println!("{x} {y}");
+        }
+    }
+}
+
+pub fn remove_block<'a>(x: i32, y: i32) {
+    let mut vect = GLOBAL_VECT.lock().unwrap();
+
+    if let Some(val) = vect.get_mut((y / CUBE_SIZE) as usize) {
+        if let Some(bloc) = val.get_mut((x / CUBE_SIZE) as usize) {
+            *bloc = None;
         }
     }
 }

@@ -26,6 +26,7 @@ use sdl2::video::WindowContext;
 use world::create_block;
 use world::init_world;
 use sky::manage_day_time;
+use world::remove_block;
 use std::time::Instant;
 use info::draw_info;
 use lazy_static::lazy_static;
@@ -89,13 +90,7 @@ fn main() {
                 Event::MouseButtonDown { mouse_btn, x, y, .. } => {
                     match mouse_btn {
                         MouseButton::Left => {
-                            let mut vect = GLOBAL_VECT.lock().unwrap();
-
-                            if let Some(val) = vect.get_mut((y / CUBE_SIZE) as usize) {
-                                if let Some(bloc) = val.get_mut((x / CUBE_SIZE) as usize) {
-                                    *bloc = None;
-                                }
-                            }
+                            remove_block(x, y);
                         }
                         MouseButton::Right => {
                             create_block((x / CUBE_SIZE) * CUBE_SIZE, (y / CUBE_SIZE) * CUBE_SIZE);
