@@ -7,6 +7,8 @@
 
 use rlua::{Lua, Result};
 use std::fs;
+use crate::camera::get_camera_pos;
+use crate::camera::set_camera_pos;
 use crate::world::create_block;
 use crate::world::remove_block;
 
@@ -30,6 +32,21 @@ pub fn run_script() -> Result<()> {
                 remove_block(x * SQUARE_SIZE, y * SQUARE_SIZE);
                 Ok(())
             })?,
+        )?;
+        lua_ctx.globals().set(
+            "set_camera_pos",
+            lua_ctx.create_function_mut(|_, (x, y): (i32, i32)| {
+                set_camera_pos(x, y);
+                Ok(())
+            })?,
+        )?;
+        lua_ctx.globals().set(
+            "get_camera_x",
+            lua_ctx.create_function(|_, ()| Ok(get_camera_pos().0))?,
+        )?;
+        lua_ctx.globals().set(
+            "get_camera_y",
+            lua_ctx.create_function(|_, ()| Ok(get_camera_pos().1))?,
         )?;
         lua_ctx.load(&script).exec()?;
 

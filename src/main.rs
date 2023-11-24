@@ -39,18 +39,20 @@ lazy_static! {
     pub static ref GLOBAL_VECT: Arc<Mutex<Vec<Vec<Option<Square>>>>> = Arc::new(Mutex::new(init_world()));
 }
 
+lazy_static! {
+    pub static ref GLOBAL_CAMERA: Arc<Mutex<Camera>> = Arc::new(Mutex::new(Camera::new(0, 0)));
+}
+
 fn main() {
     let game: (Canvas<Window>, sdl2::EventPump) = window::init_game(800, 600);
     let mut canvas: Canvas<Window> = game.0;
     let mut event_pump: sdl2::EventPump = game.1;
     let _image_context = sdl2::image::init(sdl2::image::InitFlag::JPG).unwrap();
     let texture_creator: TextureCreator<WindowContext> = canvas.texture_creator();
-    let mut camera = Camera::new(0, 0);
 
     let texture = texture_creator
         .load_texture("./assets/grass.jpg".to_string())
         .expect("Failed to load texture");
-
 
     let start_time = Instant::now();
     let mut frames: f32 = 0.0;
@@ -73,15 +75,23 @@ fn main() {
                 Event::KeyDown { keycode, .. } => {
                     match keycode {
                         Some(Keycode::Q) => {
+                            let mut camera = GLOBAL_CAMERA.lock().unwrap();
+
                             camera.x += 10;
                         }
                         Some(Keycode::D) => {
+                            let mut camera = GLOBAL_CAMERA.lock().unwrap();
+
                             camera.x -= 10;
                         }
                         Some(Keycode::Z) => {
+                            let mut camera = GLOBAL_CAMERA.lock().unwrap();
+
                             camera.y += 10;
                         }
                         Some(Keycode::S) => {
+                            let mut camera = GLOBAL_CAMERA.lock().unwrap();
+
                             camera.y -= 10;
                         }
                         _ => {}
@@ -104,6 +114,7 @@ fn main() {
 
         manage_day_time(start_time, &mut canvas);
         let mut vect = GLOBAL_VECT.lock().unwrap();
+        let camera = GLOBAL_CAMERA.lock().unwrap();
 
         // logic here
         for row in vect.iter_mut() {
