@@ -63,3 +63,16 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Contributing
 
 I you want to contribute to the project, please open an issue, I'll be happy to discuss with you !
+
+---
+
+## How to use LUA
+
+If you want to create lua script you'll need to include your main function into `src/script/main.lua`
+You'll also need to include `src/script/include.lua`, this file contains every functions calling Rust.
+Here is all available LUA functions:
+
+- place_block(x, y): nil | Used to place a block at x, y
+- destroy_block(x, y): nil | Used to destroy a block at x, y
+- get_cam_pos(): number, number | Used to get camera pos as x, y
+- set_cam_pos(x, y): nil | Used to set camera pos at x, y
