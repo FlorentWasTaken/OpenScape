@@ -12,13 +12,13 @@ use crate::GLOBAL_VECT;
 
 const CUBE_SIZE: i32 = 50;
 
-pub fn init_world<'a>() -> Vec<Vec<Option<Square>>> {
+pub fn init_world<'a>(size: u32) -> Vec<Vec<Option<Square>>> {
     let mut vec: Vec<Vec<Option<Square>>> = Vec::new();
 
-    for _ in 1..100 {
+    for _ in 0..size {
         let mut row: Vec<Option<Square>> = Vec::new();
 
-        for _ in 1..100 {
+        for _ in 0..size {
             row.push(None);
         }
         vec.push(row);

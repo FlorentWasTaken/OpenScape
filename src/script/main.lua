@@ -10,7 +10,7 @@ end
 include("./src/script/include.lua")
 
 function main()
-    place_block(0, 0)
+
 end
 
 main()
