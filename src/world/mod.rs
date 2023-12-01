@@ -38,10 +38,11 @@ pub fn create_block<'a>(x: i32, y: i32) {
 }
 
 pub fn remove_block<'a>(x: i32, y: i32) {
+    let camera = GLOBAL_CAMERA.lock().unwrap();
     let mut vect = GLOBAL_VECT.lock().unwrap();
 
-    if let Some(val) = vect.get_mut((y / CUBE_SIZE) as usize) {
-        if let Some(bloc) = val.get_mut((x / CUBE_SIZE) as usize) {
+    if let Some(val) = vect.get_mut((y / CUBE_SIZE + (camera.y * -1) / CUBE_SIZE) as usize) {
+        if let Some(bloc) = val.get_mut((x / CUBE_SIZE + (camera.x * -1) / CUBE_SIZE) as usize) {
             *bloc = None;
         }
     }
