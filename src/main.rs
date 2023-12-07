@@ -11,7 +11,6 @@ mod camera;
 mod world;
 mod sky;
 mod info;
-mod command;
 
 use sdl2::pixels::Color;
 use sdl2::ttf;
@@ -33,7 +32,6 @@ use info::draw_info;
 use lazy_static::lazy_static;
 use std::sync::{Mutex, Arc};
 use world::square::Square;
-use command::listen_commands;
 
 const CUBE_SIZE: i32 = 50;
 const WORLD_SIZE: i32 = 100;
@@ -117,7 +115,7 @@ fn main() {
         font.render("FPS: 0").blended(Color::WHITE).unwrap(),
     ).unwrap();
 
-    listen_commands();
+    world::command::listen_commands();
     world::script::run_script().unwrap();
     loop {
         if manage_events(&mut event_pump) == true {

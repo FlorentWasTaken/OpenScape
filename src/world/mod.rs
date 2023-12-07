@@ -7,6 +7,7 @@
 
 pub mod square;
 pub mod script;
+pub mod command;
 use self::square::Square;
 use crate::{GLOBAL_VECT, GLOBAL_CAMERA};
 
