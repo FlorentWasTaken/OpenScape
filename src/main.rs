@@ -32,6 +32,7 @@ use info::draw_info;
 use lazy_static::lazy_static;
 use std::sync::{Mutex, Arc};
 use world::square::Square;
+use sdl2::rect::Rect;
 
 const CUBE_SIZE: i32 = 50;
 const WORLD_SIZE: i32 = 100;
@@ -105,6 +106,10 @@ fn main() {
     let texture = texture_creator
         .load_texture("./assets/grass.jpg".to_string())
         .expect("Failed to load texture");
+    let info_texture = texture_creator
+        .load_texture("./assets/info.png".to_string())
+        .expect("Failed to load texture");
+    let info_rect = Rect::new(650, 20, 150, 100);
 
     let start_time = Instant::now();
     let mut frames: f32 = 0.0;
@@ -133,8 +138,9 @@ fn main() {
                 }
             }
         }
-        draw_info(&mut frames, &mut prev_frame_time, &texture_creator, &mut fps_text, &font, &mut canvas);
 
+        canvas.copy(&info_texture, None, info_rect).expect("Failed to apply texture");
+        draw_info(&mut frames, &mut prev_frame_time, &texture_creator, &mut fps_text, &font, &mut canvas);
         canvas.present();
         std::thread::sleep(std::time::Duration::from_millis(16));
     }
