@@ -96,4 +96,4 @@ There is also a lua lib in `src/script/lib.lua`. It contains :
 If you want some examples of the purpose of the Lua scripting system, see
 `src/script/main.lua`.
 
-![first example]("./images/example1.png")
+![first example](./images/example1.png)
