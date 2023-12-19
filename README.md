@@ -79,21 +79,23 @@ If you want to create lua script you'll need to include your main function into 
 You'll also need to include `src/script/include.lua`, this file contains every functions calling Rust.
 Here is all available LUA functions:
 
-- place_block(x, y): nil | Used to place a block at x, y
-- destroy_block(x, y): nil | Used to destroy a block at x, y
-- get_cam_pos(): number, number | Used to get camera pos as x, y
-- set_cam_pos(x, y): nil | Used to set camera pos at x, y
+- `place_block(x, y)`: nil | Used to place a block at x, y
+- `destroy_block(x, y)`: nil | Used to destroy a block at x, y
+- `get_cam_pos()`: number, number | Used to get camera pos as x, y
+- `set_cam_pos(x, y)`: nil | Used to set camera pos at x, y
 
 There is also a lua lib in `src/script/lib.lua`. It contains :
 
-- openScape.readFile(path): string | Used to get a file content
-- openScape.writeFile(path, content): bool | Used to write in / create a file
-- openScape.strToWordArray(str): table | Used to transform a string into an array (table)
-- openScape.wordArrayToStr(lines): string | Used to transform an array(table) into a string
+- `openScape.readFile(path)`: string | Used to get a file content
+- `openScape.writeFile(path, content)`: bool | Used to write in / create a file
+- `openScape.strToWordArray(str)`: table | Used to transform a string into an array (table)
+- `openScape.wordArrayToStr(lines)`: string | Used to transform an array(table) into a string
 
 ### Examples
 
 If you want some examples of the purpose of the Lua scripting system, see
 `src/script/main.lua`.
 
-![first example](./images/example1.png)
+<div align="center">
+  <img src="./images/example1.png" alt="First example" width="400"/>
+</div>
