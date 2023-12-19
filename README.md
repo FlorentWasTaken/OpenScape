@@ -7,6 +7,7 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#commands">Commands</a></li>
       </ul>
     </li>
     <li><a href="#how-to-build">How to build</a></li>
@@ -33,6 +34,15 @@ This projet can be used to learn basics of scripting.
 - ![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)
 - ![OpenGL](https://img.shields.io/badge/OpenGL-%23FFFFFF.svg?style=for-the-badge&logo=opengl) (SDL2)
 - ![Lua](https://img.shields.io/badge/lua-%232C2D72.svg?style=for-the-badge&logo=lua&logoColor=white)
+
+### Commands
+
+This program provides the possibility to enter commands in the terminal, allowing interaction with it. Here are the available commands:
+
+- `save path` save actual map as *path*
+- `load path` load map as *path*
+- `place x y` place a block at *x*, *y*
+- `remove x y` remove a block at *x*, *y*
 
 ## How to build
 
