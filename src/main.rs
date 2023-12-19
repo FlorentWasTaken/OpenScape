@@ -110,6 +110,9 @@ fn main() {
         .load_texture("./assets/info.png".to_string())
         .expect("Failed to load texture");
     let info_rect = Rect::new(650, 20, 150, 100);
+    let help_texture = texture_creator
+        .load_texture("./assets/grass.jpg".to_string())
+        .expect("Failed to load texture");
 
     let start_time = Instant::now();
     let mut frames: f32 = 0.0;
@@ -138,7 +141,10 @@ fn main() {
                 }
             }
         }
+        let x = event_pump.mouse_state().x() / CUBE_SIZE;
+        let y = event_pump.mouse_state().y() / CUBE_SIZE;
 
+        canvas.copy(&help_texture, None, Rect::new(x * CUBE_SIZE, y * CUBE_SIZE, CUBE_SIZE as u32, CUBE_SIZE as u32)).unwrap();
         canvas.copy(&info_texture, None, info_rect).expect("Failed to apply texture");
         draw_info(&mut frames, &mut prev_frame_time, &texture_creator, &mut fps_text, &font, &mut canvas);
         canvas.present();
